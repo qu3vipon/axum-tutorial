@@ -6,12 +6,11 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::error::{Error, Result};
 
+mod context;
 mod error;
 mod model;
 mod state;
 mod web;
-
-mod test_fixture;
 
 #[tokio::main]
 async fn main() -> Result<()> {

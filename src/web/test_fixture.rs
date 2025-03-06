@@ -4,7 +4,7 @@ use crate::web::auth::encode_access_token;
 use crate::web::AUTH_TOKEN;
 
 pub struct CommonFixture<'a> {
-    pub cookie: Cookie<'a>,
+    cookie: Cookie<'a>,
 }
 
 impl<'a> CommonFixture<'a> {
@@ -14,5 +14,9 @@ impl<'a> CommonFixture<'a> {
         Self {
             cookie: Cookie::new(AUTH_TOKEN, access_token),
         }
+    }
+
+    pub fn cookie(&self) -> &Cookie {
+        &self.cookie
     }
 }
