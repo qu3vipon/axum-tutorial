@@ -1,0 +1,22 @@
+[package]
+name = "axum-tutorial"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.43.0", features = ["full"] }
+tower = "0.5.2"
+hyper = "1.6.0"
+axum = {"version" = "0.8.1", features = ["tracing", "macros"]} 
+http-body-util = "0.1.2"
+mime = "0.3.17"
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
+serde = {version = "1.0.218", features = ["derive"]}
+serde_json = "1.0.140"
+tower-cookies = "0.11.0"
+
+[dev-dependencies]
+anyhow = "1.0.97"
+reqwest = {version = "0.12.12", features = ["json"]}
+jsonschema = "0.29.0"
