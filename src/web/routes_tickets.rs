@@ -18,23 +18,23 @@ pub fn routes(state: AppState) -> Router {
 }
 
 async fn create_ticket_handler(
-    State(ts): State<TicketService>,
+    State(service): State<TicketService>,
     Json(ticket_request): Json<TicketRequest>,
 ) -> Result<Json<Ticket>> {
-    let ticket = ts.create_ticket(ticket_request).await?;
+    let ticket = service.create_ticket(ticket_request).await?;
     Ok(Json(ticket))
 }
 
-async fn list_tickets_handler(State(ts): State<TicketService>) -> Result<Json<Vec<Ticket>>> {
-    let tickets = ts.list_tickets().await?;
+async fn list_tickets_handler(State(service): State<TicketService>) -> Result<Json<Vec<Ticket>>> {
+    let tickets = service.list_tickets().await?;
     Ok(Json(tickets))
 }
 
 async fn delete_ticket_handler(
-    State(ts): State<TicketService>,
+    State(service): State<TicketService>,
     Path(id): Path<u64>,
 ) -> Result<Json<Ticket>> {
-    let ticket = ts.delete_ticket(id).await?;
+    let ticket = service.delete_ticket(id).await?;
     Ok(Json(ticket))
 }
 
