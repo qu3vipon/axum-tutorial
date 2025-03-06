@@ -1,4 +1,4 @@
-use axum::Router;
+use axum::{middleware, Router};
 use model::TicketService;
 use state::AppState;
 use tower_cookies::CookieManagerLayer;
@@ -10,6 +10,8 @@ mod error;
 mod model;
 mod state;
 mod web;
+
+mod test_fixture;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -43,6 +45,10 @@ async fn main() -> Result<()> {
 fn app(state: AppState) -> Router {
     Router::new()
         .nest("/api", web::routes_login::routes())
-        .nest("/api", web::routes_tickets::routes(state))
+        .nest(
+            "/api",
+            web::routes_tickets::routes(state)
+                .route_layer(middleware::from_fn(web::auth::cookie_authenticate)),
+        )
         .layer(CookieManagerLayer::new())
 }

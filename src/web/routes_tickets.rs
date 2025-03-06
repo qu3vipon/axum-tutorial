@@ -44,6 +44,7 @@ mod tests {
     use crate::model::TicketRequest;
     use crate::model::TicketService;
     use crate::state::AppState;
+    use crate::web::AUTH_TOKEN;
     use axum::{
         body::Body,
         http::{self, Request, StatusCode},
@@ -51,18 +52,25 @@ mod tests {
     use http_body_util::BodyExt;
     use serde_json::{json, Value};
     use tower::ServiceExt;
+    use tower_cookies::Cookie;
+
+    use crate::test_fixture::CommonFixture;
 
     #[tokio::test]
     async fn create_ticket() {
         let app = app(AppState {
             ticket_service: TicketService::new().unwrap(),
         });
+
+        let fixture = CommonFixture::new();
+
         let response = app
             .oneshot(
                 Request::builder()
                     .uri("/api/tickets")
                     .method(http::Method::POST)
                     .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                    .header("Cookie", fixture.cookie.to_string())
                     .body(Body::from(
                         serde_json::to_vec(&json!({
                             "title": "t"
@@ -83,6 +91,8 @@ mod tests {
 
     #[tokio::test]
     async fn list_tickets() {
+        let fixture = CommonFixture::new();
+
         let app_state = AppState {
             ticket_service: TicketService::new().unwrap(),
         };
@@ -101,6 +111,7 @@ mod tests {
             .oneshot(
                 Request::builder()
                     .uri("/api/tickets")
+                    .header("Cookie", fixture.cookie.to_string())
                     .body(Body::empty())
                     .unwrap(),
             )
@@ -116,6 +127,8 @@ mod tests {
 
     #[tokio::test]
     async fn delete_ticket() {
+        let fixture = CommonFixture::new();
+
         let app_state = AppState {
             ticket_service: TicketService::new().unwrap(),
         };
@@ -135,6 +148,7 @@ mod tests {
                 Request::builder()
                     .uri("/api/tickets/0")
                     .method(http::Method::DELETE)
+                    .header("Cookie", fixture.cookie.to_string())
                     .body(Body::empty())
                     .unwrap(),
             )

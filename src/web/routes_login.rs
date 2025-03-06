@@ -18,11 +18,13 @@ pub fn routes() -> Router {
 }
 
 async fn login_handler(cookies: Cookies, payload: Json<LoginPayload>) -> Result<Json<Value>> {
+    // TODO: add use validation
     if payload.username != "admin" || payload.password != "1234" {
         return Err(Error::LoginFail);
     }
 
-    cookies.add(Cookie::new(web::AUTH_TOKEN, "user-1.exp.sign"));
+    let access_token = web::auth::encode_access_token(1_u64)?;
+    cookies.add(Cookie::new(web::AUTH_TOKEN, access_token));
 
     let body = Json(json!({
         "result": {
