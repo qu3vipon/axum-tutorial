@@ -1,4 +1,4 @@
-use crate::{web::auth::extractor::AuthContext, Error, Result};
+use crate::{auth::extractor::AuthContext, Error, Result};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 

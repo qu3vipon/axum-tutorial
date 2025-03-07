@@ -1,6 +1,6 @@
+use crate::auth::extractor::AuthContext;
 use crate::model::{Ticket, TicketRequest, TicketService};
 use crate::state::AppState;
-use crate::web::auth::extractor::AuthContext;
 use crate::Result;
 
 use axum::extract::{Path, State};
@@ -47,10 +47,10 @@ async fn delete_ticket_handler(
 #[cfg(test)]
 mod tests {
     use crate::app;
+    use crate::auth::extractor::AuthContext;
     use crate::model::TicketRequest;
     use crate::model::TicketService;
     use crate::state::AppState;
-    use crate::web::auth::extractor::AuthContext;
 
     use axum::{
         body::Body,
@@ -60,7 +60,7 @@ mod tests {
     use serde_json::{json, Value};
     use tower::ServiceExt;
 
-    use crate::web::test_fixture::CommonFixture;
+    use crate::routes::test_fixture::CommonFixture;
 
     #[tokio::test]
     async fn create_ticket() {

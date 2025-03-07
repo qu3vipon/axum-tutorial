@@ -1,8 +1,6 @@
-pub mod auth;
-pub mod routes_login;
-pub mod routes_tickets;
-
-mod test_fixture;
+pub mod extractor;
+pub mod jwt;
+pub mod middleware;
 
 pub const AUTH_TOKEN: &str = "access-token";
 pub const AUTH_SECRET: &str = "super-secure";

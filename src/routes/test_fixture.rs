@@ -1,7 +1,7 @@
 use tower_cookies::Cookie;
 
-use crate::web::auth::jwt::encode_access_token;
-use crate::web::AUTH_TOKEN;
+use crate::auth::jwt::encode_access_token;
+use crate::auth::AUTH_TOKEN;
 
 pub struct CommonFixture<'a> {
     cookie: Cookie<'a>,

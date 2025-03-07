@@ -1,4 +1,4 @@
-use crate::web::{AUTH_SECRET, AUTH_TOKEN_EXPIRY_HOURS};
+use crate::auth::{AUTH_SECRET, AUTH_TOKEN_EXPIRY_HOURS};
 use crate::{Error, Result};
 
 use chrono::{Duration, Utc};

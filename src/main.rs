@@ -6,10 +6,11 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::error::{Error, Result};
 
+mod auth;
 mod error;
 mod model;
+mod routes;
 mod state;
-mod web;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -42,11 +43,12 @@ async fn main() -> Result<()> {
 
 fn app(state: AppState) -> Router {
     Router::new()
-        .nest("/api", web::routes_login::routes())
+        .nest("/api", routes::routes_login::routes())
         .nest(
             "/api",
-            web::routes_tickets::routes(state)
-                .route_layer(middleware::from_fn(web::auth::cookie_authenticate)),
+            routes::routes_tickets::routes(state)
+                .route_layer(middleware::from_fn(auth::middleware::cookie_authenticate))
+                .route_layer(middleware::from_fn(auth::middleware::auth_context_resolver)),
         )
         .layer(CookieManagerLayer::new())
 }

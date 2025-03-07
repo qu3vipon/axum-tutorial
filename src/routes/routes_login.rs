@@ -5,7 +5,7 @@ use serde::Deserialize;
 use serde_json::{json, Value};
 use tower_cookies::{Cookie, Cookies};
 
-use crate::web;
+use crate::auth;
 
 #[derive(Debug, Deserialize)]
 struct LoginPayload {
@@ -24,8 +24,8 @@ async fn login_handler(cookies: Cookies, payload: Json<LoginPayload>) -> Result<
     }
 
     // TODO: replace to real user id
-    let access_token = web::auth::jwt::encode_access_token(1_u64)?;
-    cookies.add(Cookie::new(web::AUTH_TOKEN, access_token));
+    let access_token = auth::jwt::encode_access_token(1_u64)?;
+    cookies.add(Cookie::new(auth::AUTH_TOKEN, access_token));
 
     // TODO: return access_token
     let body = Json(json!({
