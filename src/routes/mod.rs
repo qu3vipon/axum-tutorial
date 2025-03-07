@@ -1,4 +1,4 @@
-pub mod routes_login;
-pub mod routes_tickets;
+pub mod login;
+pub mod tickets;
 
 mod test_fixture;

@@ -43,10 +43,10 @@ async fn main() -> Result<()> {
 
 fn app(state: AppState) -> Router {
     Router::new()
-        .nest("/api", routes::routes_login::routes())
+        .nest("/api", routes::login::routes())
         .nest(
             "/api",
-            routes::routes_tickets::routes(state)
+            routes::tickets::routes(state)
                 .route_layer(middleware::from_fn(auth::middleware::cookie_authenticate))
                 .route_layer(middleware::from_fn(auth::middleware::auth_context_resolver)),
         )
