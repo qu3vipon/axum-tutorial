@@ -1,3 +1,4 @@
+use axum::response::Response;
 use axum::{middleware, Router};
 use model::TicketService;
 use state::AppState;
@@ -50,5 +51,10 @@ fn app(state: AppState) -> Router {
                 .route_layer(middleware::from_fn(auth::middleware::cookie_authenticate))
                 .route_layer(middleware::from_fn(auth::middleware::auth_context_resolver)),
         )
+        .layer(middleware::map_response(response_mapper))
         .layer(CookieManagerLayer::new())
+}
+
+async fn response_mapper(res: Response) -> Response {
+    res
 }
