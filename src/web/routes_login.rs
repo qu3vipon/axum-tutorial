@@ -23,9 +23,11 @@ async fn login_handler(cookies: Cookies, payload: Json<LoginPayload>) -> Result<
         return Err(Error::LoginFail);
     }
 
-    let access_token = web::auth::encode_access_token(1_u64)?;
+    // TODO: replace to real user id
+    let access_token = web::auth::jwt::encode_access_token(1_u64)?;
     cookies.add(Cookie::new(web::AUTH_TOKEN, access_token));
 
+    // TODO: return access_token
     let body = Json(json!({
         "result": {
             "success": "ok"

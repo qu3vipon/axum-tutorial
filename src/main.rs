@@ -7,7 +7,6 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use crate::error::{Error, Result};
 
 mod error;
-mod extractor;
 mod model;
 mod state;
 mod web;

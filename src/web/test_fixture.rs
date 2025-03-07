@@ -1,6 +1,6 @@
 use tower_cookies::Cookie;
 
-use crate::web::auth::encode_access_token;
+use crate::web::auth::jwt::encode_access_token;
 use crate::web::AUTH_TOKEN;
 
 pub struct CommonFixture<'a> {
