@@ -1,9 +1,9 @@
 #[derive(Clone, Debug)]
-pub struct Context {
+pub struct AuthContext {
     user_id: u64,
 }
 
-impl Context {
+impl AuthContext {
     pub fn new(user_id: u64) -> Self {
         Self { user_id }
     }

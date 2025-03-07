@@ -1,7 +1,7 @@
 use crate::web::{AUTH_SECRET, AUTH_TOKEN, AUTH_TOKEN_EXPIRY_HOURS};
 use crate::{Error, Result};
 
-use crate::context::Context;
+use crate::extractor::AuthContext;
 
 use axum::body::Body;
 use axum::extract::FromRequestParts;
@@ -16,16 +16,11 @@ use serde::{Deserialize, Serialize};
 use tower_cookies::Cookies;
 
 pub async fn cookie_authenticate(
-    cookies: Cookies,
+    auth_context: Result<AuthContext>,
     request: Request<Body>,
     next: Next,
 ) -> Result<Response> {
-    let auth_token = cookies.get(AUTH_TOKEN).map(|c| c.value().to_string());
-
-    let _ = auth_token
-        .ok_or(Error::AuthTokenNotProvided)
-        .and_then(decode_access_token)?;
-
+    auth_context?;
     Ok(next.run(request).await)
 }
 
@@ -67,10 +62,11 @@ pub fn decode_access_token(access_token: String) -> Result<u64> {
     Ok(token_data.claims.sub)
 }
 
-impl<S: Send + Sync> FromRequestParts<S> for Context {
+impl<S: Send + Sync> FromRequestParts<S> for AuthContext {
     type Rejection = Error;
 
     async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self> {
+        // get auth context from cookies
         let cookies = Cookies::from_request_parts(parts, state).await.unwrap();
         let auth_token = cookies.get(AUTH_TOKEN).map(|c| c.value().to_string());
         let user_id = auth_token

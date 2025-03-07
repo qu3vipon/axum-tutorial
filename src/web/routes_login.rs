@@ -18,7 +18,7 @@ pub fn routes() -> Router {
 }
 
 async fn login_handler(cookies: Cookies, payload: Json<LoginPayload>) -> Result<Json<Value>> {
-    // TODO: add use validation
+    // TODO: add user validation
     if payload.username != "admin" || payload.password != "1234" {
         return Err(Error::LoginFail);
     }
