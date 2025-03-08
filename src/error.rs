@@ -1,10 +1,8 @@
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
-use jsonwebtoken::errors::Error as JWTError;
 
 use axum::Json;
 use serde_json::json;
-use uuid::Uuid;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -13,8 +11,8 @@ pub enum Error {
     // -- Auth errors
     LoginFail,
     AuthTokenNotProvided,
-    AuthTokenEncodeFail { err: JWTError },
-    AuthTokenDecodeFail { err: JWTError },
+    AuthTokenEncodeFail,
+    AuthTokenDecodeFail,
     AuthTokenExpired,
 
     // -- Model errors
@@ -26,8 +24,7 @@ impl IntoResponse for Error {
         let (status_code, error) = self.status_code_and_message();
         let error_body = json!({
             "error": {
-                "type": error.as_ref(),
-                "request_uuid": Uuid::new_v4().to_string(),
+                "type": error.as_ref()
             }
         });
 
@@ -48,7 +45,10 @@ impl Error {
             // 404
             Self::TicketNotFound { .. } => (StatusCode::NOT_FOUND, ClientError::NOT_FOUND),
             // 500
-            _ => (StatusCode::INTERNAL_SERVER_ERROR, ClientError::SERVER_ERROR),
+            _ => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                ClientError::INTERNAL_SERVER_ERROR,
+            ),
         }
     }
 }
@@ -59,5 +59,5 @@ pub enum ClientError {
     BAD_REQUEST,
     UNAUTHORIZED,
     NOT_FOUND,
-    SERVER_ERROR,
+    INTERNAL_SERVER_ERROR,
 }

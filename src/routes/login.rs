@@ -57,7 +57,32 @@ mod tests {
         let app = app(AppState {
             ticket_service: TicketService::new().unwrap(),
         });
+
+        // fail
         let response = app
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .uri("/api/login")
+                    .method(http::Method::POST)
+                    .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                    .body(Body::from(
+                        serde_json::to_vec(&json!({
+                            "username": "admin",
+                            "password": "invalid"
+                        }))
+                        .unwrap(),
+                    ))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+
+        // success
+        let response = app
+            .clone()
             .oneshot(
                 Request::builder()
                     .uri("/api/login")

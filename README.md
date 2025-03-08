@@ -6,4 +6,5 @@ Implemented a basic web project structure with Axum, including user authenticati
 - [ ] User Signup & Login
 - [x] JWT Authentication
 - [x] Basic CRUD
+- [ ] ORM
 - [ ] Real-time Chat

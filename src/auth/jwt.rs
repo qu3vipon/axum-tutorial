@@ -23,7 +23,7 @@ pub fn encode_access_token(user_id: u64) -> Result<String> {
         &claim,
         &EncodingKey::from_secret(AUTH_SECRET.as_ref()),
     )
-    .map_err(|err| Error::AuthTokenEncodeFail { err })
+    .map_err(|_| Error::AuthTokenEncodeFail)
 }
 
 pub fn decode_access_token(access_token: String) -> Result<u64> {
@@ -32,7 +32,7 @@ pub fn decode_access_token(access_token: String) -> Result<u64> {
         &DecodingKey::from_secret(AUTH_SECRET.as_ref()),
         &Validation::default(),
     )
-    .map_err(|err| Error::AuthTokenDecodeFail { err })?;
+    .map_err(|_| Error::AuthTokenDecodeFail)?;
 
     // check exp
     if token_data.claims.exp < Utc::now().timestamp() {
