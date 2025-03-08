@@ -8,3 +8,12 @@ Implemented a basic web project structure with Axum, including user authenticati
 - [x] Basic CRUD
 - [ ] ORM
 - [ ] Real-time Chat
+
+## Development
+```sh
+# Run server
+cargo run
+
+# Test
+cargo test
+```
